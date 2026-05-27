@@ -1,0 +1,536 @@
+/* ──────────────────────────────────────────────────────────────────────
+   WhereToGo · List View · Overrides + extensions
+   Reuses tokens, header chrome, entry screen, advanced sheet, sliders
+   from wayfinder-styles.css. Adds: full-width card grid (left) +
+   sticky Europe-map sidebar (right). Advanced sheet overlays the
+   sidebar only so the cards stay visible.
+   ────────────────────────────────────────────────────────────────────── */
+
+.wf-shell-list{
+  display: grid;
+  grid-template-rows: 64px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+.wf-shell-list[hidden]{ display: none; }
+
+/* Stage: two-column layout — cards (flex) + sticky sidebar */
+.wf-list-stage{
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  min-height: 0;
+  overflow: hidden;
+  padding: 22px 28px 22px 28px;
+}
+.wf-list-stage > *{ min-height: 0; min-width: 0; }
+
+/* LEFT pane — scrollable card area */
+.wf-list-main{
+  display: flex; flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wf-line-3) transparent;
+  padding-right: 4px;
+}
+.wf-list-main::-webkit-scrollbar{ width: 8px; }
+.wf-list-main::-webkit-scrollbar-thumb{ background: var(--wf-line-2); border-radius: 4px; }
+.wf-list-main::-webkit-scrollbar-thumb:hover{ background: var(--wf-line-3); }
+
+/* ── Header above the grid ────────────────────────────────────────── */
+.wf-list-header{
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 4px 4px 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--wf-line);
+}
+.wf-list-header-l{ display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.wf-list-title{
+  font-family: var(--wf-serif);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -.018em;
+  color: var(--wf-ink);
+  margin: 0;
+}
+.wf-list-title em{ font-style: normal; color: var(--wf-accent); }
+.wf-list-meta{
+  font-family: var(--wf-mono);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--wf-ink-3);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.wf-list-meta b{ color: var(--wf-ink); font-weight: 500; }
+.wf-list-meta .dot{ color: var(--wf-ink-4); }
+.wf-list-meta #rank-route{ color: var(--wf-ink-2); }
+
+/* ── Card grid ────────────────────────────────────────────────────── */
+.wf-list-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 16px;
+  padding-bottom: 36px;
+}
+
+/* ── A single rich card ──────────────────────────────────────────── */
+.wf-lcard{
+  appearance: none;
+  text-align: left;
+  background: var(--wf-surface);
+  border: 1px solid var(--wf-line);
+  border-radius: 16px;
+  cursor: pointer;
+  color: inherit;
+  font-family: var(--wf-sans);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  min-height: 270px;
+  padding: 0;
+  position: relative;
+  transition: border-color .2s, background .2s, transform .2s, box-shadow .25s;
+}
+.wf-lcard:hover, .wf-lcard.is-hover{
+  border-color: var(--wf-line-3);
+  background: var(--wf-surface-2);
+  transform: translateY(-1px);
+  box-shadow: var(--wf-shadow-md);
+}
+.wf-lcard.is-top{
+  background: linear-gradient(180deg, var(--wf-surface-2), var(--wf-surface));
+  border-color: rgba(125,211,192,.35);
+}
+.wf-lcard.is-top:hover{ border-color: var(--wf-accent); }
+
+/* Photo column */
+.wf-lcard-photo{
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-color: #20242e;
+  border-right: 1px solid var(--wf-line);
+  overflow: hidden;
+}
+.wf-lcard-photo img{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block;
+}
+.wf-lcard-photo::after{
+  content:"";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,10,15,.05) 35%, rgba(8,10,15,.85) 100%);
+  z-index: 1;
+}
+.wf-lcard-medal{
+  position: absolute; top: 10px; left: 10px;
+  z-index: 2;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font: 600 13px var(--wf-mono);
+  background: rgba(8,10,15,.7);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.85);
+}
+.wf-lcard.is-rank-1 .wf-lcard-medal{
+  background: linear-gradient(135deg, #f5d27a, #d9a440);
+  color: #1a1a1a; border-color: transparent;
+  box-shadow: 0 2px 8px -2px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.28);
+}
+.wf-lcard.is-rank-2 .wf-lcard-medal{
+  background: linear-gradient(135deg, #e8ebee, #adb4be);
+  color: #1a1a1a; border-color: transparent;
+  box-shadow: 0 2px 8px -2px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.28);
+}
+.wf-lcard.is-rank-3 .wf-lcard-medal{
+  background: linear-gradient(135deg, #e6a574, #b06b35);
+  color: #fff; border-color: transparent;
+  box-shadow: 0 2px 8px -2px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.28);
+}
+
+.wf-lcard-photo-foot{
+  position: absolute;
+  left: 10px; right: 10px; bottom: 10px;
+  z-index: 2;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 8px;
+}
+.wf-lcard-match{
+  display: inline-flex; align-items: baseline; gap: 3px;
+  padding: 5px 11px;
+  background: rgba(8,10,15,.72);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  border: 1px solid rgba(125,211,192,.3);
+}
+.wf-lcard-match .num{
+  font-family: var(--wf-serif);
+  font-size: 18px; line-height: 1;
+  color: var(--wf-accent);
+}
+.wf-lcard-match .unit{
+  font-family: var(--wf-mono);
+  font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+}
+.wf-lcard-iata{
+  font-family: var(--wf-mono);
+  font-size: 9.5px; letter-spacing: .22em;
+  color: rgba(255,255,255,.85);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(8,10,15,.6);
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(6px);
+  text-transform: uppercase;
+}
+
+/* Body column */
+.wf-lcard-body{
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px 14px;
+  gap: 10px;
+  min-width: 0;
+}
+.wf-lcard-head{ display: flex; flex-direction: column; gap: 4px; }
+.wf-lcard-name{
+  font-family: var(--wf-serif);
+  font-size: 22px;
+  line-height: 1.05;
+  letter-spacing: -.012em;
+  color: var(--wf-ink);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wf-lcard-sub{
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--wf-mono);
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+  flex-wrap: wrap;
+}
+.wf-lcard-sub .country{ color: var(--wf-ink-2); }
+.wf-lcard-sub .sep{ color: var(--wf-ink-4); }
+.wf-lcard-sub .pop-stars{ color: var(--wf-highlight); letter-spacing: .04em; font-size: 11px; }
+
+.wf-lcard-insight{
+  font-family: var(--wf-serif);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--wf-ink-2);
+  margin: 2px 0 0;
+  text-wrap: pretty;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wf-lcard-metrics{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--wf-line);
+}
+.wf-lcard-m{
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 0 8px;
+  border-left: 1px solid var(--wf-line);
+  min-width: 0;
+}
+.wf-lcard-m:first-child{ padding-left: 0; border-left: 0; }
+.wf-lcard-m-v{
+  font-family: var(--wf-sans);
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--wf-ink);
+  letter-spacing: -.005em;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wf-lcard-m-v u{
+  text-decoration: none;
+  font-size: 11px;
+  color: var(--wf-ink-3);
+  margin-left: 1px;
+  font-weight: 400;
+}
+.wf-lcard-m-l{
+  font-family: var(--wf-mono);
+  font-size: 8.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-lcard-m-v.co2-low{ color: rgba(125,211,192,1); }
+.wf-lcard-m-v.co2-mid{ color: var(--wf-highlight); }
+.wf-lcard-m-v.co2-high{ color: rgb(220,120,120); }
+
+/* Transport modes — single column if only one available, two columns if both */
+.wf-lcard-modes{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+.wf-lcard-modes.has-both{ grid-template-columns: 1fr 1fr; }
+.wf-lcard-mode{
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  background: var(--wf-bg-2);
+  border: 1px solid var(--wf-line);
+  border-radius: 10px;
+  min-width: 0;
+}
+.wf-lcard-mode.is-best{
+  border-color: var(--wf-accent);
+  background: linear-gradient(180deg, rgba(125,211,192,.07), var(--wf-bg-2));
+}
+.wf-lcard-mode-icon{
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: var(--wf-surface);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--wf-ink-2);
+  flex-shrink: 0;
+}
+.wf-lcard-mode.is-best .wf-lcard-mode-icon{ color: var(--wf-accent); }
+.wf-lcard-mode-icon svg{ width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.wf-lcard-mode-info{
+  display: flex; flex-direction: column; gap: 1px;
+  min-width: 0; flex: 1;
+}
+.wf-lcard-mode-row{
+  display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+}
+.wf-lcard-mode-name{
+  font-family: var(--wf-mono);
+  font-size: 8.5px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-lcard-mode-best{
+  font-family: var(--wf-mono);
+  font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--wf-accent);
+}
+.wf-lcard-mode-stats{
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 12.5px;
+  color: var(--wf-ink);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.wf-lcard-mode-stats .co2{
+  font-family: var(--wf-mono);
+  font-size: 10px;
+  color: var(--wf-ink-3);
+  letter-spacing: .04em;
+  font-weight: 400;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   RIGHT SIDEBAR — sticky panel with Europe map + best match
+   ───────────────────────────────────────────────────────────────── */
+.wf-list-side{
+  position: relative;
+  display: flex; flex-direction: column;
+  gap: 14px;
+  padding: 4px 0;
+  min-width: 0;
+}
+
+.wf-side-best{
+  padding: 14px 16px;
+  border: 1px solid var(--wf-line-2);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--wf-surface-2), var(--wf-surface));
+  box-shadow: var(--wf-shadow-md);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.wf-best-eyebrow{
+  font-family: var(--wf-mono);
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-best-name{
+  font-family: var(--wf-serif);
+  font-size: 26px; line-height: 1;
+  color: var(--wf-ink);
+  letter-spacing: -.012em;
+  margin: 2px 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wf-best-row{
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+}
+.wf-best-pct{
+  font-family: var(--wf-serif);
+  font-size: 36px; line-height: 1;
+  color: var(--wf-accent);
+  letter-spacing: -.02em;
+}
+.wf-best-pct i{
+  font-family: var(--wf-mono);
+  font-style: normal; font-size: 13px;
+  opacity: .55; margin-left: 2px; letter-spacing: .04em;
+}
+.wf-best-meta{
+  font-family: var(--wf-mono);
+  font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* Map block — fills remaining sidebar height */
+.wf-side-map{
+  flex: 1;
+  display: flex; flex-direction: column;
+  padding: 12px 14px 12px;
+  border: 1px solid var(--wf-line);
+  border-radius: 14px;
+  background: var(--wf-surface);
+  min-height: 0;
+}
+.wf-side-map-head{
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  margin-bottom: 8px;
+}
+.wf-side-map-head > span:first-child{
+  font-family: var(--wf-mono);
+  font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-side-map-hint{
+  font-family: var(--wf-mono);
+  font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--wf-ink-4);
+  transition: color .15s;
+}
+.wf-side-map.has-focus .wf-side-map-hint{ color: var(--wf-accent); }
+.wf-side-map-svg{
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: block;
+}
+.wf-side-map-legend{
+  display: flex; flex-wrap: wrap; gap: 10px 14px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--wf-line);
+  font-family: var(--wf-mono);
+  font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-side-map-legend .leg{ display: inline-flex; align-items: center; gap: 5px; }
+.wf-side-map-legend .dot{
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--wf-ink-4);
+}
+.wf-side-map-legend .dot-top{ background: #bec2d8; width: 10px; height: 10px; }
+.wf-side-map-legend .dot-mid{ background: var(--wf-ink-3); }
+.wf-side-map-legend .dot-low{ background: #6c7280; }
+.wf-side-map-legend .dot-origin{
+  background: var(--wf-accent);
+  box-shadow: 0 0 0 2px rgba(125,211,192,.18);
+}
+
+/* Override the global #map-zoom origin transform (was for the radial map) */
+#map-zoom{ transform: none; }
+
+/* ─────────────────────────────────────────────────────────────────
+   ADVANCED SHEET — overlay ONLY the sidebar (cards stay visible)
+   The base styles in wayfinder-styles.css absolute-position it to
+   inset:0 of its parent (.wf-list-side here), which is what we want.
+   ───────────────────────────────────────────────────────────────── */
+.wf-list-side .wf-sheet-panel{
+  border-radius: 14px;
+  border: 1px solid var(--wf-line-2);
+  background: var(--wf-bg-2);
+  padding: 18px 18px 14px;
+  box-shadow: -8px 0 28px -10px rgba(0,0,0,.5);
+}
+.wf-list-side .wf-sheet-title{ font-size: 22px; }
+.wf-list-side .wf-sheet-sub{ margin-bottom: 16px; }
+
+/* Responsive */
+@media (max-width: 1180px){
+  .wf-list-stage{ grid-template-columns: 1fr 320px; gap: 18px; padding: 18px 20px; }
+  .wf-list-grid{ grid-template-columns: 1fr; }
+}
+@media (max-width: 900px){
+  .wf-list-stage{ grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .wf-list-side{ order: -1; }
+  .wf-side-map-svg{ max-height: 240px; }
+}
+@media (max-width: 560px){
+  .wf-list-stage{ padding: 16px 14px; gap: 12px; }
+  .wf-lcard{ grid-template-columns: 120px 1fr; min-height: 240px; }
+  .wf-lcard-body{ padding: 12px 12px 12px; gap: 8px; }
+  .wf-lcard-name{ font-size: 19px; }
+  .wf-list-title{ font-size: 28px; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SIDEBAR MAP — Europe dots & origin marker
+   Reuses the visual language of the original mini-map.
+   ───────────────────────────────────────────────────────────────── */
+#side-land path{
+  fill: #1c2230;
+  stroke: var(--wf-ink-4);
+  stroke-width: .25;
+  stroke-linejoin: round;
+  opacity: .85;
+}
+#side-grat line{
+  stroke: var(--wf-line);
+  stroke-width: .35;
+  fill: none;
+  opacity: .6;
+}
+.wf-side-dot{
+  transition: cx .55s cubic-bezier(.2,.7,.2,1),
+              cy .55s cubic-bezier(.2,.7,.2,1),
+              r .2s, fill .2s, opacity .2s;
+}
+.wf-side-dot.tier-top{ fill: #bec2d8; }
+.wf-side-dot.tier-mid{ fill: var(--wf-ink-3); }
+.wf-side-dot.tier-low{ fill: #6c7280; opacity: .7; }
+.wf-side-dot.is-focus{ fill: var(--wf-accent) !important; opacity: 1 !important; }
+.wf-side-origin{ fill: var(--wf-accent); }
+.wf-side-origin-ring{ fill: none; stroke: var(--wf-accent); stroke-width: .9; opacity: .55; }
+.wf-side-focus-ring{ fill: none; stroke: var(--wf-accent); stroke-width: 1.6; opacity: .9; }
+.wf-side-hit{ fill: rgba(0,0,0,0); pointer-events: all; cursor: pointer; }
+.wf-side-label{
+  font-family: var(--wf-serif);
+  font-size: 11px;
+  fill: var(--wf-ink);
+  paint-order: stroke;
+  stroke: var(--wf-bg);
+  stroke-width: 3px;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   DETAIL MODAL — keep the original styles in wayfinder-styles.css
+   working; just ensure it always renders above the sidebar sheet.
+   ───────────────────────────────────────────────────────────────── */
+.wf-detail-overlay{ z-index: 60; }

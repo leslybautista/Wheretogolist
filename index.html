@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" data-bg="quiet">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WhereToGo · List view</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="wayfinder-styles.css">
+<link rel="stylesheet" href="wayfinder-list-styles.css">
+</head>
+<body>
+
+<!-- ───── LOADING STATE ───── -->
+<div class="wf-loading" id="wf-loading">
+  <div class="wf-loading-ring"></div>
+  <div class="wf-loading-text">Loading destinations…</div>
+</div>
+
+<!-- ───── ENTRY SCREEN ───── -->
+<section class="wf-entry" id="wf-entry">
+  <header class="wf-entry-top">
+    <div class="wf-brand">
+      <div class="wf-brand-mark">
+        <svg viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="11" stroke="currentColor" stroke-width=".9" opacity=".35"/>
+          <circle cx="15" cy="15" r="6.5" stroke="currentColor" stroke-width=".9" opacity=".5"/>
+          <circle cx="15" cy="15" r="2.2" fill="currentColor"/>
+          <path d="M15 1.5 L15 6 M15 24 L15 28.5 M1.5 15 L6 15 M24 15 L28.5 15" stroke="currentColor" stroke-width=".9"/>
+        </svg>
+      </div>
+      <div class="wf-brand-text">
+        <h1>WhereToGo</h1>
+      </div>
+    </div>
+    <div class="wf-entry-step"><b>Step 1</b> · Set the brief</div>
+  </header>
+
+  <div class="wf-entry-body">
+    <div class="wf-entry-inner">
+
+      <div class="wf-entry-hero">
+        <div class="wf-entry-eyebrow">A briefing for your next trip</div>
+        <h2 class="wf-entry-title">Where to <em>next?</em></h2>
+        <p class="wf-entry-lede">Tell us where you're starting from, when you're going, and what you're after. We'll rank the best matches against time, cost, carbon, and curiosity.</p>
+      </div>
+
+      <div class="wf-entry-form">
+
+        <div class="wf-q wf-q-row2">
+          <div class="wf-q-col">
+            <div class="wf-q-label">
+              <div class="wf-q-label-num">01</div>
+              <div class="wf-q-label-text">Departing from</div>
+            </div>
+            <label class="wf-entry-origin">
+              <span class="wf-origin-prefix">From</span>
+              <select id="entry-origin"></select>
+            </label>
+          </div>
+
+          <div class="wf-q-col">
+            <div class="wf-q-label">
+              <div class="wf-q-label-num">02</div>
+              <div class="wf-q-label-text">When?</div>
+            </div>
+            <label class="wf-entry-origin">
+              <span class="wf-origin-prefix">Month</span>
+              <select id="entry-month">
+                <option value="">— select —</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="wf-q">
+          <div class="wf-q-label">
+            <div class="wf-q-label-num">03</div>
+            <div class="wf-q-label-text">What matters?</div>
+            <div class="wf-q-label-hint">We'll weight the ranking. Edit later.</div>
+          </div>
+          <div class="wf-vibes" id="entry-vibes"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-entry-foot">
+    <div class="wf-entry-foot-summary" id="entry-summary">— · — · —</div>
+    <button class="wf-entry-cta" id="entry-cta">
+      See my matches
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- ───── MAIN SHELL ───── -->
+<div class="wf-shell wf-shell-list" id="wf-shell" hidden>
+
+  <header class="wf-top">
+    <div class="wf-brand">
+      <div class="wf-brand-mark">
+        <svg viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="11" stroke="currentColor" stroke-width=".9" opacity=".35"/>
+          <circle cx="15" cy="15" r="6.5" stroke="currentColor" stroke-width=".9" opacity=".5"/>
+          <circle cx="15" cy="15" r="2.2" fill="currentColor"/>
+          <path d="M15 1.5 L15 6 M15 24 L15 28.5 M1.5 15 L6 15 M24 15 L28.5 15" stroke="currentColor" stroke-width=".9"/>
+        </svg>
+      </div>
+      <div class="wf-brand-text">
+        <h1>WhereToGo</h1>
+      </div>
+    </div>
+
+    <div class="wf-top-center">
+      <div class="wf-origin-pill" title="Choose your origin city">
+        <span class="wf-origin-prefix">From</span>
+        <select id="origin-select"></select>
+      </div>
+      <div class="wf-origin-pill" id="month-pill" title="Change travel month">
+        <span class="wf-origin-prefix">Month</span>
+        <select id="month-select"></select>
+      </div>
+      <div class="wf-preset-tray" id="preset-tray"></div>
+    </div>
+
+    <div class="wf-top-right">
+      <button class="wf-pill-btn" id="btn-setup" title="Edit setup">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        <span class="wf-pill-btn-label">Setup</span>
+      </button>
+      <button class="wf-pill-btn" id="btn-advanced" title="Advanced preferences">
+        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="6" y1="9" x2="6" y2="22"/><line x1="18" y1="2" x2="18" y2="15"/></svg>
+        <span class="wf-pill-btn-label">Advanced</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ───── LIST STAGE — left: cards, right: Europe map sidebar ───── -->
+  <main class="wf-list-stage">
+
+    <!-- LEFT: header + card grid -->
+    <section class="wf-list-main">
+      <div class="wf-list-header">
+        <div class="wf-list-header-l">
+          <h2 class="wf-list-title">Ranked <em>for you</em></h2>
+          <div class="wf-list-meta">
+            <span>Top <b id="rank-count">12</b></span>
+            <span class="dot">·</span>
+            <span>composite score</span>
+            <span class="dot">·</span>
+            <span id="rank-preset">balanced</span>
+            <span class="dot">·</span>
+            <span id="rank-route">— → —</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-list-grid" id="rank-list"></div>
+    </section>
+
+    <!-- RIGHT: Europe geographic context + Advanced sheet overlay -->
+    <aside class="wf-list-side" id="list-side">
+
+      <div class="wf-side-best" id="best-pill">
+        <div class="wf-best-eyebrow">Best match</div>
+        <div class="wf-best-name" id="best-name">—</div>
+        <div class="wf-best-row">
+          <div class="wf-best-pct"><span id="best-pct">—</span><i>%</i></div>
+          <div class="wf-best-meta" id="best-meta">— · — · —</div>
+        </div>
+      </div>
+
+      <div class="wf-side-map">
+        <div class="wf-side-map-head">
+          <span>Geographic context</span>
+          <span class="wf-side-map-hint" id="side-map-hint">Hover a card to locate it</span>
+        </div>
+        <svg class="wf-side-map-svg" id="side-europe-svg" viewBox="0 0 320 360" preserveAspectRatio="xMidYMid meet">
+          <rect class="wf-mini-frame" x="0" y="0" width="320" height="360" rx="8"/>
+          <g id="side-grat"></g>
+          <g id="side-land"></g>
+          <g id="side-dots"></g>
+          <g id="side-hits"></g>
+        </svg>
+        <div class="wf-side-map-legend">
+          <span class="leg"><span class="dot dot-top"></span>Top 5</span>
+          <span class="leg"><span class="dot dot-mid"></span>Top 6–12</span>
+          <span class="leg"><span class="dot dot-low"></span>Rest</span>
+          <span class="leg"><span class="dot dot-origin"></span>Origin</span>
+        </div>
+      </div>
+
+      <!-- ADVANCED SHEET — overlays only this sidebar -->
+      <div class="wf-sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="wf-sheet-panel">
+        <div class="wf-sheet-head">
+          <div>
+            <h3 class="wf-sheet-title" id="sheet-title">Advanced <em>personalization</em></h3>
+          </div>
+          <button class="wf-sheet-close" id="sheet-close" aria-label="Close">
+            <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="wf-sheet-sub">Drag each weight from 0% to 100% — the ranking re-sorts live.</div>
+
+        <div class="wf-slider-card">
+          <div class="wf-slider-head"><div class="wf-slider-label">Travel time</div><div class="wf-slider-val" data-vw="time">25%</div></div>
+          <input class="wf-range" type="range" min="0" max="100" value="25" data-w="time"/>
+          <div class="wf-slider-hint">Door-to-door, including transfers.</div>
+        </div>
+        <div class="wf-slider-card">
+          <div class="wf-slider-head"><div class="wf-slider-label">Cost</div><div class="wf-slider-val" data-vw="cost">25%</div></div>
+          <input class="wf-range" type="range" min="0" max="100" value="25" data-w="cost"/>
+          <div class="wf-slider-hint">Estimated round-trip fare per traveller.</div>
+        </div>
+        <div class="wf-slider-card">
+          <div class="wf-slider-head"><div class="wf-slider-label">CO₂ emissions</div><div class="wf-slider-val" data-vw="co2">25%</div></div>
+          <input class="wf-range" type="range" min="0" max="100" value="25" data-w="co2"/>
+          <div class="wf-slider-hint">Per-traveller carbon for the chosen mode.</div>
+        </div>
+        <div class="wf-slider-card">
+          <div class="wf-slider-head"><div class="wf-slider-label">Popularity</div><div class="wf-slider-val" data-vw="pop">25%</div></div>
+          <input class="wf-range" type="range" min="0" max="100" value="25" data-w="pop"/>
+          <div class="wf-slider-hint">How visited the destination is.</div>
+        </div>
+
+        <div class="wf-sheet-foot">
+          <label class="wf-invert-row">
+            <div>
+              <div class="label">Prefer hidden gems</div>
+              <div class="hint">Invert popularity — favour less-visited cities.</div>
+            </div>
+            <input type="checkbox" id="pop-invert"/>
+            <span class="wf-switch"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    </aside>
+  </main>
+</div>
+
+<!-- ───── DETAIL MODAL ───── -->
+<div class="wf-detail-overlay" id="detail-overlay" role="dialog" aria-modal="true" aria-labelledby="detail-name">
+  <div class="wf-detail-modal" id="detail-modal">
+    <button class="wf-detail-close" id="detail-close" aria-label="Close">
+      <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+    </button>
+    <div class="wf-detail-hero" id="detail-hero">
+      <div class="wf-detail-hero-meta">
+        <div class="wf-detail-hero-rank" id="detail-rank">— · —</div>
+        <h2 class="wf-detail-hero-name" id="detail-name">—<span class="country" id="detail-country"></span></h2>
+        <div class="wf-detail-hero-sub" id="detail-sub">—</div>
+      </div>
+    </div>
+    <div class="wf-detail-body" id="detail-body"></div>
+  </div>
+</div>
+
+<script src="wayfinder-data.js"></script>
+<script src="wayfinder-list-app.js"></script>
+
+</body>
+</html>
