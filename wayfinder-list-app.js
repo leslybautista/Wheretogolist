@@ -270,8 +270,14 @@ function readAdvanced(){
     if(out) out.textContent = vals[k] + "%";
   });
   STATE.popInvert = document.getElementById("pop-invert").checked;
-  STATE.presetId = "custom";
-  drawPresetTray();
+   STATE.presetId = "custom";
+  if(presetTrayEl) presetTrayEl.querySelectorAll(".wf-preset").forEach(b=>b.classList.remove("is-active"));
+  window.logEvent?.("WEIGHT_CHANGE", {
+    time: Math.round(STATE.weights.time*100),
+    cost: Math.round(STATE.weights.cost*100),
+    co2:  Math.round(STATE.weights.co2*100),
+    pop:  Math.round(STATE.weights.pop*100)
+  });
 }
 function wireAdvanced(){
   const btn   = document.getElementById("btn-advanced");
@@ -463,6 +469,8 @@ function drawSideMap(){
 
 /* ────────── HOVER / SELECT SYNC ────────── */
 function onHover(name){
+  if(STATE.hovered) window.hoverEnd?.(STATE.hovered);
+  if(name)          window.hoverStart?.(name, "card");
   STATE.hovered = name;
   if(listEl){
     listEl.querySelectorAll(".wf-lcard").forEach(el=>{
@@ -803,8 +811,9 @@ function buildDetailModalBody(d, cell){
 }
 
 function openDetail(name){
-  const d = lastData.find(x => x.name === name);
+  const d = lastData.find(x=>x.name===name);
   if(!d) return;
+  window.logEvent?.("CARD_DETAIL_OPEN", { dest: name, rank: d.rank, score: d.score });
   STATE.active = name;
 
   const overlay = document.getElementById("detail-overlay");
@@ -853,6 +862,7 @@ function openDetail(name){
   drawSideMap();
 }
 function closeDetail(){
+  window.logEvent?.("CARD_DETAIL_CLOSE", { dest: STATE.active || null });
   const overlay = document.getElementById("detail-overlay");
   if(!overlay) return;
   overlay.classList.remove("is-open");

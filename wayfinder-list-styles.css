@@ -278,9 +278,9 @@
   text-transform: uppercase;
   color: var(--wf-ink-3);
 }
-.wf-lcard-m-v.co2-low{ color: rgba(125,211,192,1); }
+.wf-lcard-m-v.co2-low{ color: #4f9ed4; }
 .wf-lcard-m-v.co2-mid{ color: var(--wf-highlight); }
-.wf-lcard-m-v.co2-high{ color: rgb(220,120,120); }
+.wf-lcard-m-v.co2-high{ color: #9a6020; }
 
 /* Transport modes — single column if only one available, two columns if both */
 .wf-lcard-modes{
