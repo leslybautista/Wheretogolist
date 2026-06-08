@@ -24,6 +24,32 @@ const STATE = {
   hovered:    null,
 };
 
+/* ────────── STUDY INTERACTION LOGGING ────────── */
+const SESSION_LOG = [];
+
+(function seedStudyLog(){
+  try {
+    const p    = new URLSearchParams(location.search);
+    const cond = p.get("c");          // "A" = Map+Card, "B" = Card Only
+    const pid  = p.get("p");          // participant id passed from questionnaire
+    if(cond){
+      localStorage.setItem("wtg_condition",   cond);
+      localStorage.setItem("wtg_participant", pid  || "?");
+      localStorage.setItem("wtg_session",     (pid || "?") + "_" + cond);
+      localStorage.setItem("wtg_log",         "[]"); // reset on fresh launch
+    }
+  } catch(_){}
+})();
+
+window.logEvent = function(type, payload){
+  try {
+    const entry = { t: Date.now(), type, ...payload };
+    SESSION_LOG.push(entry);
+    localStorage.setItem("wtg_log", JSON.stringify(SESSION_LOG));
+  } catch(_){}
+};
+/* ────────────────────────────────────────────────── */
+
 const MONTHS = [
   ["Jan","January"],["Feb","February"],["Mar","March"],["Apr","April"],
   ["May","May"],["Jun","June"],["Jul","July"],["Aug","August"],
