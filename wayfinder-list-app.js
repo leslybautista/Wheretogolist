@@ -488,7 +488,7 @@ function drawSideMap(){
     const hit = svgEl("circle", { cx: x, cy: y, r: 10, class: "wf-side-hit" });
     hit.addEventListener("mouseenter", () => onHover(d.name));
     hit.addEventListener("mouseleave", () => onHover(null));
-    hit.addEventListener("click",     () => openDetail(d.name));
+    hit.addEventListener("click",     () => scrollToCard(d.name));
     sideHitsEl.appendChild(hit);
   });
 }
@@ -834,6 +834,15 @@ function buildDetailModalBody(d, cell){
     ${seasonStrip}
     ${interestsHTML}
   `;
+}
+
+function scrollToCard(name){
+  const card = listEl && listEl.querySelector(`.wf-lcard[data-name="${CSS.escape(name)}"]`);
+  if(!card) return;
+  card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  card.classList.add("is-map-highlight");
+  card.addEventListener("animationend", () => card.classList.remove("is-map-highlight"), { once: true });
+  onHover(name);
 }
 
 function openDetail(name){
