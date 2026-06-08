@@ -839,7 +839,15 @@ function buildDetailModalBody(d, cell){
 function scrollToCard(name){
   const card = listEl && listEl.querySelector(`.wf-lcard[data-name="${CSS.escape(name)}"]`);
   if(!card) return;
-  card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  const container = document.querySelector(".wf-list-main");
+  if(container){
+    const containerRect = container.getBoundingClientRect();
+    const cardRect      = card.getBoundingClientRect();
+    const targetTop     = container.scrollTop + (cardRect.top - containerRect.top) - 20;
+    container.scrollTo({ top: targetTop, behavior: "smooth" });
+  }
+
   card.classList.add("is-map-highlight");
   card.addEventListener("animationend", () => card.classList.remove("is-map-highlight"), { once: true });
   onHover(name);
