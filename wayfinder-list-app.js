@@ -198,6 +198,7 @@ function compute(){
 /* ────────── DOM refs ────────── */
 let listEl, rankCountEl, rankPresetEl, rankRouteEl, bestNameEl, bestPctEl, bestMetaEl;
 let sideLandEl, sideDotsEl, sideHitsEl, sideGratEl, sideMapEl, sideMapHintEl;
+let presetTrayEl;
 let lastData = [];
 
 function captureRefs(){
@@ -214,6 +215,7 @@ function captureRefs(){
   sideGratEl   = document.getElementById("side-grat");
   sideMapEl    = document.querySelector(".wf-side-map");
   sideMapHintEl= document.getElementById("side-map-hint");
+  presetTrayEl  = document.getElementById("preset-tray");
 }
 
 /* ────────── TOP CHROME ────────── */
