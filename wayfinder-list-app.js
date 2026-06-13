@@ -490,13 +490,17 @@ function drawSideMap(){
     const hit = svgEl("circle", { cx: x, cy: y, r: 10, class: "wf-side-hit" });
     hit.addEventListener("mouseenter", () => onHover(d.name));
     hit.addEventListener("mouseleave", () => onHover(null));
-    hit.addEventListener("click",     () => scrollToCard(d.name));
+    hit.addEventListener("click",     () => {
+      window.logEvent?.("MAP_DOT_CLICK", { dest: d.name, rank: d.rank });
+      scrollToCard(d.name);
+    });
     sideHitsEl.appendChild(hit);
   });
 }
 
 /* ────────── HOVER / SELECT SYNC ────────── */
 function onHover(name){
+  if(STATE.hovered === name) return;
   if(STATE.hovered) window.hoverEnd?.(STATE.hovered);
   if(name)          window.hoverStart?.(name, "card");
   STATE.hovered = name;
