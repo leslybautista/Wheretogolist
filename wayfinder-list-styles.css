@@ -363,60 +363,146 @@
   min-width: 0;
 }
 
+/* ── Best-match card — redesigned ── */
 .wf-side-best{
-  padding: 14px 16px;
+  padding: 14px 16px 12px;
   border: 1px solid var(--wf-line-2);
   border-radius: 14px;
   background: linear-gradient(180deg, var(--wf-surface-2), var(--wf-surface));
   box-shadow: var(--wf-shadow-md);
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column; gap: 10px;
 }
 .wf-best-eyebrow{
   font-family: var(--wf-mono);
-  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  font-size: 8.5px; letter-spacing: .22em; text-transform: uppercase;
   color: var(--wf-ink-3);
 }
+
+/* Title row: name+country left, score right */
+.wf-best-title-row{
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+}
+.wf-best-name-group{ display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .wf-best-name{
   font-family: var(--wf-serif);
   font-size: 26px; line-height: 1;
   color: var(--wf-ink);
   letter-spacing: -.012em;
-  margin: 2px 0 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.wf-best-row{
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+.wf-best-country{
+  font-family: var(--wf-mono);
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--wf-ink-3);
 }
 .wf-best-pct{
   font-family: var(--wf-serif);
-  font-size: 36px; line-height: 1;
+  font-size: 28px; line-height: 1;
   color: var(--wf-accent);
   letter-spacing: -.02em;
+  flex-shrink: 0;
 }
 .wf-best-pct i{
   font-family: var(--wf-mono);
-  font-style: normal; font-size: 13px;
-  opacity: .55; margin-left: 2px; letter-spacing: .04em;
-}
-.wf-best-meta{
-  font-family: var(--wf-mono);
-  font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--wf-ink-3);
-  text-align: right;
-  line-height: 1.4;
+  font-style: normal; font-size: 11px;
+  opacity: .6; margin-left: 1px; letter-spacing: .04em;
 }
 
-/* Map block — fills remaining sidebar height */
+/* Metric rows: label | blocks | % | value */
+.wf-best-metrics{ display: flex; flex-direction: column; gap: 5px; }
+.wf-best-metric-row{
+  display: grid;
+  grid-template-columns: 32px 1fr 30px auto;
+  align-items: center;
+  gap: 8px;
+}
+.wf-best-m-label{
+  font-family: var(--wf-mono);
+  font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-best-bar{
+  display: flex; gap: 3px; align-items: center;
+}
+.wf-best-blk{
+  width: 18px; height: 5px; border-radius: 2px;
+  background: var(--wf-line-3);
+  flex-shrink: 0;
+}
+.wf-best-blk.on{ background: var(--wf-accent); }
+.wf-best-m-pct{
+  font-family: var(--wf-mono);
+  font-size: 9px; letter-spacing: .04em;
+  color: var(--wf-ink-3);
+  text-align: right;
+}
+.wf-best-m-val{
+  font-family: var(--wf-mono);
+  font-size: 10px; letter-spacing: .06em;
+  color: var(--wf-ink);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Divider */
+.wf-best-hr{
+  height: 1px;
+  background: var(--wf-line);
+  margin: 0;
+}
+
+/* Insight text */
+.wf-best-insight{
+  font-family: var(--wf-serif);
+  font-style: italic;
+  font-size: 12.5px; line-height: 1.5;
+  color: var(--wf-ink-2);
+  margin: 0;
+  text-wrap: pretty;
+}
+.wf-best-insight:empty{ display: none; }
+
+/* Match progress bar */
+.wf-best-match-row{
+  display: grid;
+  grid-template-columns: 36px 1fr 34px;
+  align-items: center;
+  gap: 8px;
+}
+.wf-best-match-label{
+  font-family: var(--wf-mono);
+  font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--wf-ink-3);
+}
+.wf-best-match-track{
+  height: 5px;
+  background: var(--wf-line-3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.wf-best-match-fill{
+  height: 100%;
+  background: var(--wf-accent);
+  border-radius: 3px;
+  transition: width .4s cubic-bezier(.2,.7,.2,1);
+}
+.wf-best-match-pct{
+  font-family: var(--wf-mono);
+  font-size: 9px; letter-spacing: .04em;
+  color: var(--wf-accent);
+  text-align: right;
+}
+
+/* Map block — compact fixed height */
 .wf-side-map{
-  flex: 1;
   display: flex; flex-direction: column;
-  padding: 12px 14px 12px;
+  padding: 10px 12px 10px;
   border: 1px solid var(--wf-line);
   border-radius: 14px;
   background: var(--wf-surface);
-  min-height: 0;
+  max-height: 210px;
 }
 .wf-side-map-head{
   display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
@@ -438,6 +524,7 @@
   width: 100%;
   flex: 1;
   min-height: 0;
+  max-height: 130px;
   display: block;
 }
 .wf-side-map-legend{

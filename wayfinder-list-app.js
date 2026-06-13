@@ -196,7 +196,7 @@ function compute(){
 }
 
 /* ────────── DOM refs ────────── */
-let listEl, rankCountEl, rankPresetEl, rankRouteEl, bestNameEl, bestPctEl, bestMetaEl;
+let listEl, rankCountEl, rankPresetEl, rankRouteEl, bestNameEl, bestPctEl;
 let sideLandEl, sideDotsEl, sideHitsEl, sideGratEl, sideMapEl, sideMapHintEl;
 let presetTrayEl;
 let lastData = [];
@@ -208,7 +208,6 @@ function captureRefs(){
   rankRouteEl  = document.getElementById("rank-route");
   bestNameEl   = document.getElementById("best-name");
   bestPctEl    = document.getElementById("best-pct");
-  bestMetaEl   = document.getElementById("best-meta");
   sideLandEl   = document.getElementById("side-land");
   sideDotsEl   = document.getElementById("side-dots");
   sideHitsEl   = document.getElementById("side-hits");
@@ -563,14 +562,59 @@ function render(){
   rankCountEl.textContent  = top.length;
   rankPresetEl.textContent = p ? p.label.toLowerCase() : (STATE.presetId || "custom");
   rankRouteEl.textContent  = `${o.name} · ${m ? m[1] : "—"}`;
+  const bestCountryEl  = document.getElementById("best-country");
+  const bestMetricsEl  = document.getElementById("best-metrics");
+  const bestInsightEl  = document.getElementById("best-insight");
+  const bestMatchFill  = document.getElementById("best-match-fill");
+  const bestMatchPctEl = document.getElementById("best-match-pct");
+
   if(top[0]){
-    bestNameEl.textContent = top[0].name;
-    bestPctEl.textContent  = top[0].matchPct;
-    bestMetaEl.textContent = `${top[0].country} · ${fmtTime(top[0].time)} · €${top[0].cost}`;
+    const d0 = top[0];
+    bestNameEl.textContent = d0.name;
+    bestPctEl.textContent  = d0.matchPct;
+    if(bestCountryEl) bestCountryEl.textContent = d0.country || "";
+
+    // Metric rows: weight bars + actual values
+    if(bestMetricsEl){
+      const W = STATE.weights;
+      const wPct = {
+        time: Math.round(W.time * 100),
+        cost: Math.round(W.cost * 100),
+        co2:  Math.round(W.co2  * 100),
+        pop:  Math.round(W.pop  * 100),
+      };
+      const BLOCKS = 6;
+      const blks = n => Array.from({length: BLOCKS}, (_, i) =>
+        `<span class="wf-best-blk${i < n ? " on" : ""}"></span>`
+      ).join("");
+      const rows = [
+        { label:"Time",  pct: wPct.time, val: fmtTime(d0.time) },
+        { label:"Cost",  pct: wPct.cost, val: `€${d0.cost}` },
+        { label:"CO₂",  pct: wPct.co2,  val: d0.co2 != null ? `${d0.co2} kg` : "—" },
+        { label:"Pop",   pct: wPct.pop,  val: popStars(d0.pop) },
+      ];
+      bestMetricsEl.innerHTML = rows.map(r => {
+        const filled = Math.round((r.pct / 100) * BLOCKS);
+        return `<div class="wf-best-metric-row">
+          <span class="wf-best-m-label">${r.label}</span>
+          <div class="wf-best-bar">${blks(filled)}</div>
+          <span class="wf-best-m-pct">${r.pct}%</span>
+          <span class="wf-best-m-val">${r.val}</span>
+        </div>`;
+      }).join("");
+    }
+
+    if(bestInsightEl) bestInsightEl.textContent = d0.insight || "";
+    if(bestMatchFill)  bestMatchFill.style.width  = d0.matchPct + "%";
+    if(bestMatchPctEl) bestMatchPctEl.textContent = d0.matchPct + "%";
   } else {
     bestNameEl.textContent = "—";
     bestPctEl.textContent  = "—";
-    bestMetaEl.textContent = "—";
+    if(bestCountryEl)  bestCountryEl.textContent  = "";
+    if(bestMetricsEl)  bestMetricsEl.innerHTML     = "";
+    if(bestInsightEl)  bestInsightEl.textContent   = "";
+    if(bestMatchFill)  bestMatchFill.style.width   = "0%";
+    if(bestMatchPctEl) bestMatchPctEl.textContent  = "—";
   }
 
   listEl.innerHTML = "";
