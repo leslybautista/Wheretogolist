@@ -291,16 +291,15 @@
 .wf-lcard-m-v.co2-mid{ color: var(--wf-highlight); }
 .wf-lcard-m-v.co2-high{ color: #9a6020; }
 
-/* Transport modes — single column if only one available, two columns if both */
+/* Transport modes — always single column, stacked vertically */
 .wf-lcard-modes{
   display: grid;
   grid-template-columns: 1fr;
-  gap: 6px;
+  gap: 5px;
 }
-.wf-lcard-modes.has-both{ grid-template-columns: 1fr 1fr; }
 .wf-lcard-mode{
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 10px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px;
   background: var(--wf-bg-2);
   border: 1px solid var(--wf-line);
   border-radius: 10px;
@@ -311,7 +310,7 @@
   background: linear-gradient(180deg, rgba(125,211,192,.07), var(--wf-bg-2));
 }
 .wf-lcard-mode-icon{
-  width: 26px; height: 26px;
+  width: 28px; height: 28px;
   border-radius: 7px;
   background: var(--wf-surface);
   display: flex; align-items: center; justify-content: center;
@@ -321,7 +320,7 @@
 .wf-lcard-mode.is-best .wf-lcard-mode-icon{ color: var(--wf-accent); }
 .wf-lcard-mode-icon svg{ width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }
 .wf-lcard-mode-info{
-  display: flex; flex-direction: column; gap: 1px;
+  display: flex; flex-direction: column; gap: 2px;
   min-width: 0; flex: 1;
 }
 .wf-lcard-mode-row{
@@ -336,10 +335,11 @@
   font-family: var(--wf-mono);
   font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase;
   color: var(--wf-accent);
+  white-space: nowrap;
 }
 .wf-lcard-mode-stats{
   display: flex; align-items: baseline; gap: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--wf-ink);
   font-weight: 500;
   white-space: nowrap;

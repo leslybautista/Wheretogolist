@@ -225,7 +225,7 @@ function drawOriginSelect(){
   Object.entries(ORIGINS).forEach(([k,v])=>{
     const o = document.createElement("option");
     o.value = k;
-    o.textContent = `${v.name}, ${v.country}`;
+    o.textContent = v.name;
     sel.appendChild(o);
   });
   sel.value = STATE.originKey;
@@ -240,10 +240,10 @@ function drawOriginSelect(){
 function drawMonthSelect(){
   const sel = document.getElementById("month-select");
   sel.innerHTML = "";
-  MONTHS.forEach(([s], i)=>{
+  MONTHS.forEach(([, full], i)=>{
     const o = document.createElement("option");
     o.value = i;
-    o.textContent = s;
+    o.textContent = full;
     sel.appendChild(o);
   });
   sel.value = STATE.month;
@@ -337,7 +337,7 @@ function drawEntry(){
   oSel.innerHTML = "";
   Object.entries(ORIGINS).forEach(([k,v])=>{
     const o = document.createElement("option");
-    o.value = k; o.textContent = `${v.name}, ${v.country}`;
+    o.value = k; o.textContent = v.name;
     oSel.appendChild(o);
   });
   oSel.value = STATE.originKey;

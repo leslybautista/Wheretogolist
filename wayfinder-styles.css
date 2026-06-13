@@ -414,7 +414,7 @@ html, body {
 /* ─── Top bar ─── */
 .wf-top{
   display: grid;
-  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+  grid-template-columns: auto minmax(0,1fr) auto;
   gap: 16px;
   align-items: center;
   padding: 0 22px;
@@ -423,7 +423,8 @@ html, body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
-.wf-brand{ display:flex; align-items:center; gap:14px; }
+.wf-brand{ display:flex; align-items:center; gap:14px; min-width:0; }
+.wf-brand-sep{ width:1px; height:18px; background:var(--wf-line-2); flex-shrink:0; margin: 0 2px; }
 .wf-brand-mark{ width: 30px; height: 30px; position: relative; display: flex; align-items: center; justify-content: center; }
 .wf-brand-mark svg{ width:30px; height:30px; }
 .wf-brand-text h1{
@@ -455,12 +456,12 @@ html, body {
   background: var(--wf-surface);
   color: var(--wf-ink-2);
   font-size: 12.5px;
-  width: 140px;
+  width: 136px;
   flex-shrink: 0;
 }
-/* Month pill only needs room for 3-letter abbreviation */
 #month-pill{
-  width: 100px;
+  width: 116px;
+  padding-left: 12px;
 }
 .wf-origin-pill .wf-origin-prefix{
   color: var(--wf-ink-3);
@@ -532,9 +533,9 @@ html, body {
 .wf-preset{
   appearance: none; border: 0; background: transparent;
   color: var(--wf-ink-2);
-  font: 500 12px var(--wf-sans);
+  font: 500 10.5px var(--wf-sans);
   letter-spacing: .01em;
-  padding: 6px 13px;
+  padding: 5px 10px;
   border-radius: 999px;
   cursor: pointer;
   transition: color .18s, background .18s, box-shadow .18s;
