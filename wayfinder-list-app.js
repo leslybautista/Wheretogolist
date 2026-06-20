@@ -378,7 +378,7 @@ function openEntry(){
 /* ──────────────────────────────────────────────────────────────────
    EUROPE SIDEBAR MAP — Mercator projection of europe.geojson
    ────────────────────────────────────────────────────────────────── */
-const MAP = { W: 320, H: 360, latMin: 34, latMax: 71, lonMin: -25, lonMax: 32 };
+const MAP = { W: 320, H: 292, latMin: 34, latMax: 63, lonMin: -12, lonMax: 40 };
 function project(lat, lon){
   const x = (lon - MAP.lonMin) / (MAP.lonMax - MAP.lonMin) * MAP.W;
   const merc = l => Math.log(Math.tan(Math.PI / 4 + toRad(l) / 2));

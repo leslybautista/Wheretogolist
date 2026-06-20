@@ -502,7 +502,6 @@
   border: 1px solid var(--wf-line);
   border-radius: 14px;
   background: var(--wf-surface);
-  max-height: 210px;
 }
 .wf-side-map-head{
   display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
@@ -522,10 +521,8 @@
 .wf-side-map.has-focus .wf-side-map-hint{ color: var(--wf-accent); }
 .wf-side-map-svg{
   width: 100%;
-  flex: 1;
-  min-height: 0;
-  max-height: 130px;
   display: block;
+  aspect-ratio: 320 / 292;
 }
 .wf-side-map-legend{
   display: flex; flex-wrap: wrap; gap: 10px 14px;
@@ -575,7 +572,6 @@
 @media (max-width: 900px){
   .wf-list-stage{ grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .wf-list-side{ order: -1; }
-  .wf-side-map-svg{ max-height: 240px; }
 }
 @media (max-width: 560px){
   .wf-list-stage{ padding: 16px 14px; gap: 12px; }
