@@ -154,6 +154,8 @@ function compute(){
     })
     .filter(Boolean);
 
+  if (data.length === 0) return [];
+
   normalize(data,"time");
   normalize(data,"cost");
   normalize(data,"co2");
